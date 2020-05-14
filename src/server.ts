@@ -1,4 +1,5 @@
 import express from "express";
+import { Request, Response } from 'express';
 import bodyParser from "body-parser";
 import { filterImageFromURL, deleteLocalFiles } from "./util/util";
 
@@ -32,14 +33,14 @@ import { filterImageFromURL, deleteLocalFiles } from "./util/util";
 
   // Root Endpoint
   // Displays a simple message to the user
-  app.get("/", async (req, res) => {
+  app.get("/", async (req: Request, res: Response) => {
     res.send("try GET /filteredimage?image_url={{}}");
   });
 
   // filter image endpoint
 
-  app.get("/filteredimage", async (req, res) => {
-    const url = req.query.image_url;
+  app.get("/filteredimage", async (req: Request, res: Response) => {
+    const url: string = req.query.image_url;
     if (!url) {
       res.status(400).send({ message: "url is null" });
     }
