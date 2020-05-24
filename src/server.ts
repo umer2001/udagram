@@ -37,7 +37,7 @@ import { filterImageFromURL, deleteLocalFiles, renderVideo } from "./util/util";
     res.send("try GET /filteredimage?image_url={{}}");
   });
 
-  // filter image endpoint
+  // filter image --> render video --> delete tmp files endpoint
 
   app.get("/filteredimage", async (req: Request, res: Response) => {
     const url: string = req.query.image_url;
@@ -50,9 +50,6 @@ import { filterImageFromURL, deleteLocalFiles, renderVideo } from "./util/util";
       res.status(200).sendFile(filteredimage, () => {
         deleteLocalFiles([filteredimage]);
       });
-      
-      //renderVideo();
-      //res.status(200).send("Done");
     } catch (error) {
       res.status(422).send("invalid image url");
     }

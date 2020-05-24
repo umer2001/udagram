@@ -10,7 +10,7 @@ const videoEncoder = "h264"; // mpeg4 libvpx
 var output: string ;
 
 // filterImageFromURL
-// helper function to download, filter, and save the filtered image locally
+// helper function to download, filter, and save the filtered images locally
 // returns the absolute path to the local image
 // INPUTS
 //    inputURL: string - a publicly accessible url to an image file
@@ -33,13 +33,9 @@ export async function filterImageFromURL(inputURL: string): Promise<string>{
     });
 }
 
-// filterImageFromURL
-// helper function to download, filter, and save the filtered image locally
-// returns the absolute path to the local image
-// INPUTS
-//    inputURL: string - a publicly accessible url to an image file
-// RETURNS
-//    an absolute path to a filtered image locally saved file
+// renderVideo
+// helper function takes all images that are in tmp and make a video
+// uses a command line tool ffmpeg
 export async function renderVideo() {
     console.log("Encoding");
     await exec(`ffmpeg -start_number 1 -i src/util/tmp/filtered.%d.jpg -vcodec ${videoEncoder} -profile:v baseline -pix_fmt yuv420p -filter:v "setpts=20.5*PTS" src/util/tmp/${output}.mp4`);
