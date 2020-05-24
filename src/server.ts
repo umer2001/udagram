@@ -1,7 +1,7 @@
 import express from "express";
 import { Request, Response } from 'express';
 import bodyParser from "body-parser";
-import { filterImageFromURL, deleteLocalFiles } from "./util/util";
+import { filterImageFromURL, deleteLocalFiles, renderVideo } from "./util/util";
 
 (async () => {
   // Init the Express application
@@ -46,7 +46,13 @@ import { filterImageFromURL, deleteLocalFiles } from "./util/util";
     }
     try {
       const filteredimage = await filterImageFromURL(url);
-      res.status(200).sendFile(filteredimage, () => deleteLocalFiles([filteredimage]));
+      renderVideo();
+      res.status(200).sendFile(filteredimage, () => {
+        deleteLocalFiles([filteredimage]);
+      });
+      
+      //renderVideo();
+      //res.status(200).send("Done");
     } catch (error) {
       res.status(422).send("invalid image url");
     }
