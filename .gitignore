@@ -23,6 +23,7 @@ coverage/
 www/
 node_modules/
 tmp/
+complete/
 temp/
 platforms/
 plugins/
