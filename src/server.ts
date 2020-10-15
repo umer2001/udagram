@@ -1,8 +1,9 @@
 import express from "express";
 import { Request, Response } from "express";
 import bodyParser from "body-parser";
-var path = require("path");
+import path from "path";
 import { filterImageFromURL, deleteLocalFiles, renderVideo } from "./util/util";
+import fs from "fs";
 
 (async () => {
   // Init the Express application
@@ -70,6 +71,27 @@ import { filterImageFromURL, deleteLocalFiles, renderVideo } from "./util/util";
     }
   });
 
+  //display all in json format
+  app.get("/display", async (req: Request, res: Response) => {
+    const dirPath = path.join(__dirname, "util/complete");
+    fs.readdir(dirPath, (err, files) => {
+      if (err) {
+        console.log("somthing went wrong -> " + err);
+        res.send("somthing went wrong -> " + err);
+      } else {
+        console.log(files);
+        res.send(files);
+      }
+    });
+  });
+
+  // send specific video
+  app.get("/display/:name", async (req: Request, res: Response) => {
+    const dirPath = path.join(__dirname, "util/complete");
+    res
+      .status(200)
+      .sendFile(`${dirPath}/${req.params.name}`, (e) => console.log(e));
+  });
   // Start the Server
   app.listen(port, () => {
     console.log(`server running http://localhost:${port}`);
