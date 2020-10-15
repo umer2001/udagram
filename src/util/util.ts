@@ -16,33 +16,38 @@ var output: string;
 //    inputURL: string - a publicly accessible url to an image file
 // RETURNS
 //    an absolute path to a filtered image locally saved file
-export async function filterImageFromURL(inputURL: string): Promise<string> {
+export async function filterImageFromURL(
+  inputURL: string,
+  index: Number
+): Promise<string> {
   return new Promise(async (resolve) => {
-    output = path.basename(inputURL, ".jpg");
-    console.log("output : " + output);
-    for (var i: number = 0; i <= 5; i++) {
+    try {
+      output = path.basename(inputURL, ".jpg");
       const photo = await Jimp.read(inputURL);
-      console.log("in the image loop" + i);
-      const outpath = "/tmp/filtered." + i + ".jpg";
-      photo
-        .color([{ apply: "hue", params: [i * 10] }])
+      console.log(`/tmp/${output}.${index}.jpg`);
+      const outpath = `/tmp/${output}.${index}.jpg`;
+      await photo
+        .color([{ apply: "hue", params: [Number(index) * 10] }])
         .write(__dirname + outpath, (img) => {
-          // resolve(__dirname + outpath);
+          resolve(__dirname + outpath);
         });
+    } catch (error) {
+      console.log("errors ->" + error);
     }
-    return resolve(inputURL);
   });
 }
 
 // renderVideo
 // helper function takes all images that are in tmp and make a video
 // uses a command line tool ffmpeg
-export async function renderVideo() {
-  console.log("Encoding");
-  await exec(
-    `ffmpeg -start_number 1 -i src/util/tmp/filtered.%d.jpg -vcodec ${videoEncoder} -profile:v baseline -pix_fmt yuv420p -filter:v "setpts=20.5*PTS" src/util/complete/${output}.mp4`
-  );
-  return path.join(__dirname, "complete", `${output}.mp4`);
+export async function renderVideo(name: string): Promise<string> {
+  return new Promise(async (resolve) => {
+    console.log("Encoding for " + name);
+    await exec(
+      `ffmpeg -start_number 1 -i src/util/tmp/${name}.%d.jpg -vcodec ${videoEncoder} -profile:v baseline -pix_fmt yuv420p -filter:v "setpts=20.5*PTS" src/util/complete/${output}.mp4`
+    );
+    resolve(path.join(__dirname, "complete", `${output}.mp4`));
+  });
 }
 
 // deleteLocalFiles

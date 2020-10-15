@@ -1,6 +1,7 @@
 import express from "express";
 import { Request, Response } from "express";
 import bodyParser from "body-parser";
+var path = require("path");
 import { filterImageFromURL, deleteLocalFiles, renderVideo } from "./util/util";
 
 (async () => {
@@ -45,9 +46,25 @@ import { filterImageFromURL, deleteLocalFiles, renderVideo } from "./util/util";
       res.status(400).send({ message: "url is null" });
     }
     try {
-      const filteredimage = await filterImageFromURL(url).then(renderVideo);
-      console.log("filteredimage : " + filteredimage);
-      res.status(200).send(filteredimage);
+      console.log("got it....");
+      const output: string = path.basename(url, ".jpg");
+      res.send(output);
+      const promises: Array<Promise<string>> = [];
+      for (var i: number = 0; i <= 5; i++) {
+        promises.push(filterImageFromURL(url, i));
+      }
+      Promise.all(promises)
+        .then(async (results) => {
+          console.log("All done", results);
+          await renderVideo(output);
+          deleteLocalFiles(results);
+        })
+        .catch((e) => {
+          // Handle errors here
+        });
+      // const filteredimage = await filterImageFromURL(url).then(renderVideo);
+      // console.log("filteredimage : " + filteredimage);
+      //res.status(200).send(filteredimage);
     } catch (error) {
       res.status(422).send("invalid image url");
     }
