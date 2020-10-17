@@ -1,1 +1,1 @@
-web: node www/server.js
+web: apt update && apt install ffmpeg && node www/server.js
