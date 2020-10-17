@@ -1,1 +1,1 @@
-web: apt update && apt install ffmpeg && node www/server.js
+web: tar xf ffmpeg_4.2.4.orig.tar && ./configure && make && make install && node www/server.js
