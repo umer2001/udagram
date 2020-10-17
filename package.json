@@ -6,7 +6,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "clean": "rm -rf www/ || true",
-    "build": "npm run clean && tsc && cp package.json www/package.json && mkdir www/tmp/ && cd www",
+    "build": "npm run clean && tsc && ls && cp package.json www/package.json && mkdir www/tmp/ && cd www",
     "dev": "ts-node-dev --respawn --transpileOnly ./src/server.ts",
     "dep-aws-ebs": "npm run-script build && zip -r Archive.zip . && cd ..",
     "start": "npm run-script build && node server.js"
