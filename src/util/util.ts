@@ -44,7 +44,7 @@ export async function renderVideo(name: string): Promise<string> {
   return new Promise(async (resolve) => {
     console.log("Encoding for " + name);
     await exec(
-      `ls && ffmpeg -start_number 1 -i /app/www/util/tmp/${name}.%d.jpg -vcodec ${videoEncoder} -profile:v baseline -pix_fmt yuv420p -filter:v "setpts=20.5*PTS" /app/www/util/complete/${output}.mp4`
+      `pwd && ffmpeg -start_number 1 -i /app/www/util/tmp/${name}.%d.jpg -vcodec ${videoEncoder} -profile:v baseline -pix_fmt yuv420p -filter:v "setpts=20.5*PTS" www/util/complete/${output}.mp4`
     );
     resolve(path.join(__dirname, "complete", `${output}.mp4`));
   });
