@@ -1,3 +1,4 @@
+import { resolve } from "bluebird";
 import fs from "fs";
 import Jimp = require("jimp");
 const util = require("util");
@@ -44,7 +45,7 @@ export async function renderVideo(name: string): Promise<string> {
   return new Promise(async (resolve) => {
     console.log("Encoding for " + name);
     await exec(
-      `pwd && ffmpeg -start_number 1 -i /app/www/util/tmp/${name}.%d.jpg -vcodec ${videoEncoder} -profile:v baseline -pix_fmt yuv420p -filter:v "setpts=20.5*PTS" www/util/complete/${output}.mp4`
+      `ffmpeg -start_number 1 -i /app/www/util/tmp/${name}.%d.jpg -vcodec ${videoEncoder} -profile:v baseline -pix_fmt yuv420p -filter:v "setpts=20.5*PTS" www/util/complete/${output}.mp4`
     );
     resolve(path.join(__dirname, "complete", `${output}.mp4`));
   });
@@ -63,7 +64,10 @@ export async function deleteLocalFiles(files: Array<string>) {
 }
 
 //test
-export async function test() {
-  console.log("testing");
-  await exec(`pwd`);
+export async function test(): Promise<string> {
+  return new Promise(async (resolve) => {
+    console.log("testing");
+    var t = await exec(`pwd`);
+    resolve(t);
+  });
 }
