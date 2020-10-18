@@ -68,6 +68,7 @@ export async function test(): Promise<string> {
   return new Promise(async (resolve) => {
     console.log("testing");
     var t = await exec(`pwd`);
+    console.log(t);
     resolve(t);
   });
 }

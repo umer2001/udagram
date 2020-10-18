@@ -80,6 +80,7 @@ function test() {
         return new Promise((resolve) => __awaiter(this, void 0, void 0, function* () {
             console.log("testing");
             var t = yield exec(`pwd`);
+            console.log(t);
             resolve(t);
         }));
     });
