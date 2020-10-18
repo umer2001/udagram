@@ -54,7 +54,7 @@ function renderVideo(name) {
     return __awaiter(this, void 0, void 0, function* () {
         return new Promise((resolve) => __awaiter(this, void 0, void 0, function* () {
             console.log("Encoding for " + name);
-            yield exec(`ffmpeg -start_number 1 -i /app/www/util/tmp/${name}.%d.jpg -vcodec ${videoEncoder} -profile:v baseline -pix_fmt yuv420p -filter:v "setpts=20.5*PTS" www/util/complete/${output}.mp4`);
+            yield exec(`ffmpeg -start_number 1 -i /app/www/util/tmp/${name}.%d.jpg -vcodec ${videoEncoder} -profile:v baseline -pix_fmt yuv420p -filter:v "setpts=20.5*PTS" ./www/util/complete/${output}.mp4`);
             resolve(path.join(__dirname, "complete", `${output}.mp4`));
         }));
     });
@@ -79,7 +79,7 @@ function test() {
     return __awaiter(this, void 0, void 0, function* () {
         return new Promise((resolve) => __awaiter(this, void 0, void 0, function* () {
             console.log("testing");
-            var t = yield exec(`pwd`);
+            var t = yield exec(`cd ./www/util/complete`);
             console.log(t);
             resolve(t);
         }));

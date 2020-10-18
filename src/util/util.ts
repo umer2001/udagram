@@ -45,7 +45,7 @@ export async function renderVideo(name: string): Promise<string> {
   return new Promise(async (resolve) => {
     console.log("Encoding for " + name);
     await exec(
-      `ffmpeg -start_number 1 -i /app/www/util/tmp/${name}.%d.jpg -vcodec ${videoEncoder} -profile:v baseline -pix_fmt yuv420p -filter:v "setpts=20.5*PTS" www/util/complete/${output}.mp4`
+      `ffmpeg -start_number 1 -i /app/www/util/tmp/${name}.%d.jpg -vcodec ${videoEncoder} -profile:v baseline -pix_fmt yuv420p -filter:v "setpts=20.5*PTS" ./www/util/complete/${output}.mp4`
     );
     resolve(path.join(__dirname, "complete", `${output}.mp4`));
   });
@@ -67,7 +67,7 @@ export async function deleteLocalFiles(files: Array<string>) {
 export async function test(): Promise<string> {
   return new Promise(async (resolve) => {
     console.log("testing");
-    var t = await exec(`pwd`);
+    var t = await exec(`cd ./www/util/complete`);
     console.log(t);
     resolve(t);
   });
