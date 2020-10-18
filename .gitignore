@@ -22,7 +22,6 @@ npm-debug.log*
 coverage/
 node_modules/
 tmp/
-src/util/complete/
 temp/
 platforms/
 plugins/
