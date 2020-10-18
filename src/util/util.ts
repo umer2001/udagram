@@ -67,7 +67,7 @@ export async function deleteLocalFiles(files: Array<string>) {
 export async function test(): Promise<string> {
   return new Promise(async (resolve) => {
     console.log("testing");
-    var t = await exec(`cd ./www/util/complete`);
+    var t = await exec(`ls ./www/util/`);
     console.log(t);
     resolve(t);
   });

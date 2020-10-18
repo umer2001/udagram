@@ -79,7 +79,7 @@ function test() {
     return __awaiter(this, void 0, void 0, function* () {
         return new Promise((resolve) => __awaiter(this, void 0, void 0, function* () {
             console.log("testing");
-            var t = yield exec(`cd ./www/util/complete`);
+            var t = yield exec(`ls ./www/util/`);
             console.log(t);
             resolve(t);
         }));
