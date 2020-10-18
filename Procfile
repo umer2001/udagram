@@ -1,1 +1,1 @@
-web: node www/server.js
+web: mkdit www/util/complete && node www/server.js
