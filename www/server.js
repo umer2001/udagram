@@ -95,6 +95,11 @@ const fs_1 = __importDefault(require("fs"));
             .status(200)
             .sendFile(`${dirPath}/${req.params.name}`, (e) => console.log(e));
     }));
+    // testing
+    app.get("/test", (req, res) => __awaiter(this, void 0, void 0, function* () {
+        util_1.test();
+        res.status(200).send("testing");
+    }));
     // Start the Server
     app.listen(port, () => {
         console.log(`server running http://localhost:${port}`);

@@ -2,7 +2,12 @@ import express from "express";
 import { Request, Response } from "express";
 import bodyParser from "body-parser";
 import path from "path";
-import { filterImageFromURL, deleteLocalFiles, renderVideo } from "./util/util";
+import {
+  filterImageFromURL,
+  deleteLocalFiles,
+  renderVideo,
+  test,
+} from "./util/util";
 import fs from "fs";
 
 (async () => {
@@ -92,6 +97,13 @@ import fs from "fs";
       .status(200)
       .sendFile(`${dirPath}/${req.params.name}`, (e) => console.log(e));
   });
+
+  // testing
+  app.get("/test", async (req: Request, res: Response) => {
+    test();
+    res.status(200).send("testing");
+  });
+
   // Start the Server
   app.listen(port, () => {
     console.log(`server running http://localhost:${port}`);

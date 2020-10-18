@@ -54,7 +54,7 @@ function renderVideo(name) {
     return __awaiter(this, void 0, void 0, function* () {
         return new Promise((resolve) => __awaiter(this, void 0, void 0, function* () {
             console.log("Encoding for " + name);
-            yield exec(`ls && ffmpeg -start_number 1 -i /app/www/util/tmp/${name}.%d.jpg -vcodec ${videoEncoder} -profile:v baseline -pix_fmt yuv420p -filter:v "setpts=20.5*PTS" /app/www/util/complete/${output}.mp4`);
+            yield exec(`pwd && ffmpeg -start_number 1 -i /app/www/util/tmp/${name}.%d.jpg -vcodec ${videoEncoder} -profile:v baseline -pix_fmt yuv420p -filter:v "setpts=20.5*PTS" www/util/complete/${output}.mp4`);
             resolve(path.join(__dirname, "complete", `${output}.mp4`));
         }));
     });
@@ -74,4 +74,12 @@ function deleteLocalFiles(files) {
     });
 }
 exports.deleteLocalFiles = deleteLocalFiles;
+//test
+function test() {
+    return __awaiter(this, void 0, void 0, function* () {
+        console.log("testing");
+        yield exec(`pwd`);
+    });
+}
+exports.test = test;
 //# sourceMappingURL=util.js.map

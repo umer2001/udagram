@@ -61,3 +61,9 @@ export async function deleteLocalFiles(files: Array<string>) {
     console.log("deleting");
   }
 }
+
+//test
+export async function test() {
+  console.log("testing");
+  await exec(`pwd`);
+}
