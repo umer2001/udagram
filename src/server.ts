@@ -2,12 +2,7 @@ import express from "express";
 import { Request, Response } from "express";
 import bodyParser from "body-parser";
 import path from "path";
-import {
-  filterImageFromURL,
-  deleteLocalFiles,
-  renderVideo,
-  test,
-} from "./util/util";
+import { filterImageFromURL, deleteLocalFiles, renderVideo } from "./util/util";
 import fs from "fs";
 
 (async () => {
@@ -56,7 +51,7 @@ import fs from "fs";
       const output: string = path.basename(url, ".jpg");
       res.send(output);
       const promises: Array<Promise<string>> = [];
-      for (var i: number = 0; i <= 5; i++) {
+      for (var i: number = 0; i <= 36; i++) {
         promises.push(filterImageFromURL(url, i));
       }
       Promise.all(promises)
@@ -96,12 +91,6 @@ import fs from "fs";
     res
       .status(200)
       .sendFile(`${dirPath}/${req.params.name}`, (e) => console.log(e));
-  });
-
-  // testing
-  app.get("/test", async (req: Request, res: Response) => {
-    test();
-    res.status(200).send("testing");
   });
 
   // Start the Server

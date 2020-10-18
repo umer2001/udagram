@@ -1,4 +1,3 @@
-import { resolve } from "bluebird";
 import fs from "fs";
 import Jimp = require("jimp");
 const util = require("util");
@@ -6,7 +5,6 @@ var path = require("path");
 
 const exec = util.promisify(require("child_process").exec);
 
-const debug = false;
 const videoEncoder = "h264"; // mpeg4 libvpx
 var output: string;
 
@@ -61,14 +59,4 @@ export async function deleteLocalFiles(files: Array<string>) {
     fs.unlinkSync(file);
     console.log("deleting");
   }
-}
-
-//test
-export async function test(): Promise<string> {
-  return new Promise(async (resolve) => {
-    console.log("testing");
-    var t = await exec(`ls /app/src/util/`);
-    console.log(t);
-    resolve(t);
-  });
 }

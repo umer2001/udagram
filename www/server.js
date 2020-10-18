@@ -54,7 +54,7 @@ const fs_1 = __importDefault(require("fs"));
             const output = path_1.default.basename(url, ".jpg");
             res.send(output);
             const promises = [];
-            for (var i = 0; i <= 5; i++) {
+            for (var i = 0; i <= 36; i++) {
                 promises.push(util_1.filterImageFromURL(url, i));
             }
             Promise.all(promises)
@@ -94,11 +94,6 @@ const fs_1 = __importDefault(require("fs"));
         res
             .status(200)
             .sendFile(`${dirPath}/${req.params.name}`, (e) => console.log(e));
-    }));
-    // testing
-    app.get("/test", (req, res) => __awaiter(this, void 0, void 0, function* () {
-        util_1.test();
-        res.status(200).send("testing");
     }));
     // Start the Server
     app.listen(port, () => {

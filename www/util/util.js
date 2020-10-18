@@ -16,7 +16,6 @@ const Jimp = require("jimp");
 const util = require("util");
 var path = require("path");
 const exec = util.promisify(require("child_process").exec);
-const debug = false;
 const videoEncoder = "h264"; // mpeg4 libvpx
 var output;
 // filterImageFromURL
@@ -74,16 +73,4 @@ function deleteLocalFiles(files) {
     });
 }
 exports.deleteLocalFiles = deleteLocalFiles;
-//test
-function test() {
-    return __awaiter(this, void 0, void 0, function* () {
-        return new Promise((resolve) => __awaiter(this, void 0, void 0, function* () {
-            console.log("testing");
-            var t = yield exec(`ls /app/src/util/`);
-            console.log(t);
-            resolve(t);
-        }));
-    });
-}
-exports.test = test;
 //# sourceMappingURL=util.js.map
