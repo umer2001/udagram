@@ -76,7 +76,7 @@ const fs_1 = __importDefault(require("fs"));
     }));
     //display all in json format
     app.get("/display", (req, res) => __awaiter(this, void 0, void 0, function* () {
-        const dirPath = path_1.default.join(__dirname, "util/complete");
+        const dirPath = "/app/src/util/complete";
         fs_1.default.readdir(dirPath, (err, files) => {
             if (err) {
                 console.log("somthing went wrong -> " + err);
@@ -90,7 +90,7 @@ const fs_1 = __importDefault(require("fs"));
     }));
     // send specific video
     app.get("/display/:name", (req, res) => __awaiter(this, void 0, void 0, function* () {
-        const dirPath = path_1.default.join(__dirname, "util/complete");
+        const dirPath = "/app/src/util/complete";
         res
             .status(200)
             .sendFile(`${dirPath}/${req.params.name}`, (e) => console.log(e));

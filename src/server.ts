@@ -78,7 +78,7 @@ import fs from "fs";
 
   //display all in json format
   app.get("/display", async (req: Request, res: Response) => {
-    const dirPath = path.join(__dirname, "util/complete");
+    const dirPath = "/app/src/util/complete";
     fs.readdir(dirPath, (err, files) => {
       if (err) {
         console.log("somthing went wrong -> " + err);
@@ -92,7 +92,7 @@ import fs from "fs";
 
   // send specific video
   app.get("/display/:name", async (req: Request, res: Response) => {
-    const dirPath = path.join(__dirname, "util/complete");
+    const dirPath = "/app/src/util/complete";
     res
       .status(200)
       .sendFile(`${dirPath}/${req.params.name}`, (e) => console.log(e));
