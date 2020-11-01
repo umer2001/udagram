@@ -78,7 +78,8 @@ exports.deleteLocalFiles = deleteLocalFiles;
 function cronReq() {
     return __awaiter(this, void 0, void 0, function* () {
         https_1.default
-            .get("https://testing-dep201.000webhostapp.com/prod/cron.php", (resp) => {
+            .get(process.env.BACKEND_CRON_URL ||
+            "https://testing-dep201.000webhostapp.com/prod/cron.php", (resp) => {
             let data = "";
             // A chunk of data has been recieved.
             resp.on("data", (chunk) => {

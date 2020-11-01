@@ -65,19 +65,23 @@ export async function deleteLocalFiles(files: Array<string>) {
 // sends a cron req to wallpaper backend
 export async function cronReq() {
   https
-    .get("https://testing-dep201.000webhostapp.com/prod/cron.php", (resp) => {
-      let data = "";
+    .get(
+      process.env.BACKEND_CRON_URL ||
+        "https://testing-dep201.000webhostapp.com/prod/cron.php",
+      (resp) => {
+        let data = "";
 
-      // A chunk of data has been recieved.
-      resp.on("data", (chunk) => {
-        data += chunk;
-      });
+        // A chunk of data has been recieved.
+        resp.on("data", (chunk) => {
+          data += chunk;
+        });
 
-      // The whole response has been received. Print out the result.
-      resp.on("end", () => {
-        console.log(data);
-      });
-    })
+        // The whole response has been received. Print out the result.
+        resp.on("end", () => {
+          console.log(data);
+        });
+      }
+    )
     .on("error", (err) => {
       console.log("Error: " + err.message);
     });
