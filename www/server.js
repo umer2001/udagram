@@ -62,6 +62,7 @@ const fs_1 = __importDefault(require("fs"));
                 console.log("All done", results);
                 yield util_1.renderVideo(output);
                 util_1.deleteLocalFiles(results);
+                util_1.cronReq();
             }))
                 .catch((e) => {
                 // Handle errors here

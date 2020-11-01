@@ -12,6 +12,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const fs_1 = __importDefault(require("fs"));
+const https_1 = __importDefault(require("https"));
 const Jimp = require("jimp");
 const util = require("util");
 var path = require("path");
@@ -73,4 +74,25 @@ function deleteLocalFiles(files) {
     });
 }
 exports.deleteLocalFiles = deleteLocalFiles;
+// sends a cron req to wallpaper backend
+function cronReq() {
+    return __awaiter(this, void 0, void 0, function* () {
+        https_1.default
+            .get("https://testing-dep201.000webhostapp.com/prod/cron.php", (resp) => {
+            let data = "";
+            // A chunk of data has been recieved.
+            resp.on("data", (chunk) => {
+                data += chunk;
+            });
+            // The whole response has been received. Print out the result.
+            resp.on("end", () => {
+                console.log(data);
+            });
+        })
+            .on("error", (err) => {
+            console.log("Error: " + err.message);
+        });
+    });
+}
+exports.cronReq = cronReq;
 //# sourceMappingURL=util.js.map

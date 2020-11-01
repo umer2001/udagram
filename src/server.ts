@@ -2,7 +2,12 @@ import express from "express";
 import { Request, Response } from "express";
 import bodyParser from "body-parser";
 import path from "path";
-import { filterImageFromURL, deleteLocalFiles, renderVideo } from "./util/util";
+import {
+  filterImageFromURL,
+  deleteLocalFiles,
+  renderVideo,
+  cronReq,
+} from "./util/util";
 import fs from "fs";
 
 (async () => {
@@ -59,6 +64,7 @@ import fs from "fs";
           console.log("All done", results);
           await renderVideo(output);
           deleteLocalFiles(results);
+          cronReq();
         })
         .catch((e) => {
           // Handle errors here

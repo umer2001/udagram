@@ -1,4 +1,5 @@
 import fs from "fs";
+import https from "https";
 import Jimp = require("jimp");
 const util = require("util");
 var path = require("path");
@@ -59,4 +60,25 @@ export async function deleteLocalFiles(files: Array<string>) {
     fs.unlinkSync(file);
     console.log("deleting");
   }
+}
+
+// sends a cron req to wallpaper backend
+export async function cronReq() {
+  https
+    .get("https://testing-dep201.000webhostapp.com/prod/cron.php", (resp) => {
+      let data = "";
+
+      // A chunk of data has been recieved.
+      resp.on("data", (chunk) => {
+        data += chunk;
+      });
+
+      // The whole response has been received. Print out the result.
+      resp.on("end", () => {
+        console.log(data);
+      });
+    })
+    .on("error", (err) => {
+      console.log("Error: " + err.message);
+    });
 }
