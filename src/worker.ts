@@ -1,5 +1,5 @@
 import path from "path";
-import { parentPort } from "worker_threads";
+import { parentPort, workerData } from "worker_threads";
 import {
   filterImageFromURL,
   deleteLocalFiles,
@@ -7,14 +7,14 @@ import {
   cronReq,
 } from "./util/util";
 
-export function startWorking(url: string) {
+function work(url: string) {
   console.log("in function");
   try {
     console.log("got it....");
-    const output: string = path.basename(url, ".jpg");
+    const output: string = path.basename(workerData.url, ".jpg");
     const promises: Array<Promise<string>> = [];
     for (var i: number = 0; i <= 36; i++) {
-      promises.push(filterImageFromURL(url, i));
+      promises.push(filterImageFromURL(workerData.url, i));
     }
     Promise.all(promises)
       .then(async (results) => {
@@ -31,3 +31,5 @@ export function startWorking(url: string) {
     console.log(error);
   }
 }
+
+work(workerData.url);

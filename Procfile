@@ -1,1 +1,1 @@
-web: cp src/worker.js www/ && node www/server.js
+web: node www/server.js

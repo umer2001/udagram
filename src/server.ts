@@ -109,7 +109,6 @@ import fs from "fs";
       res.send("ok");
       const worker = new Worker("./worker.js", {
         workerData: {
-          path: "./intermediator.js",
           url: url,
         },
       });

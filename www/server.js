@@ -106,7 +106,6 @@ const fs_1 = __importDefault(require("fs"));
             res.send("ok");
             const worker = new worker_threads_1.Worker("./worker.js", {
                 workerData: {
-                    path: "./intermediator.js",
                     url: url,
                 },
             });
