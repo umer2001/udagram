@@ -104,7 +104,7 @@ const fs_1 = __importDefault(require("fs"));
             console.log("im main thread");
             console.log("name from main thread : " + url);
             res.send("ok");
-            const worker = new worker_threads_1.Worker("./worker.js", {
+            const worker = new worker_threads_1.Worker(`${path_1.default.resolve(__dirname)}/worker.js`, {
                 workerData: {
                     url: url,
                 },

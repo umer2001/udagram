@@ -107,7 +107,7 @@ import fs from "fs";
       console.log("im main thread");
       console.log("name from main thread : " + url);
       res.send("ok");
-      const worker = new Worker("./worker.js", {
+      const worker = new Worker(`${path.resolve(__dirname)}/worker.js`, {
         workerData: {
           url: url,
         },
