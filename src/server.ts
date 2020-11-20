@@ -1,3 +1,4 @@
+import { isMainThread, workerData, Worker, parentPort } from "worker_threads";
 import express from "express";
 import { Request, Response } from "express";
 import bodyParser from "body-parser";
@@ -97,6 +98,28 @@ import fs from "fs";
     res
       .status(200)
       .sendFile(`${dirPath}/${req.params.name}`, (e) => console.log(e));
+  });
+
+  //display all in json format
+  app.get("/test", async (req: Request, res: Response) => {
+    const url: string = req.query.image_url;
+    if (isMainThread) {
+      console.log("im main thread");
+      console.log("name from main thread : " + url);
+      res.send("ok");
+      const worker = new Worker("./worker.js", {
+        workerData: {
+          path: "./intermediator.js",
+          url: url,
+        },
+      });
+      //Listen from worker
+      worker.on("message", (msg) => console.log("done : " + msg));
+      worker.on("error", (err) => console.log("error on worker : " + err));
+      worker.on("exit", (code) => {
+        if (code !== 0) new Error(`Worker stopped with exit code ${code}`);
+      });
+    }
   });
 
   // Start the Server

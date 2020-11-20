@@ -11,6 +11,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+const worker_threads_1 = require("worker_threads");
 const express_1 = __importDefault(require("express"));
 const body_parser_1 = __importDefault(require("body-parser"));
 const path_1 = __importDefault(require("path"));
@@ -95,6 +96,28 @@ const fs_1 = __importDefault(require("fs"));
         res
             .status(200)
             .sendFile(`${dirPath}/${req.params.name}`, (e) => console.log(e));
+    }));
+    //display all in json format
+    app.get("/test", (req, res) => __awaiter(this, void 0, void 0, function* () {
+        const url = req.query.image_url;
+        if (worker_threads_1.isMainThread) {
+            console.log("im main thread");
+            console.log("name from main thread : " + url);
+            res.send("ok");
+            const worker = new worker_threads_1.Worker("./worker.js", {
+                workerData: {
+                    path: "./intermediator.js",
+                    url: url,
+                },
+            });
+            //Listen from worker
+            worker.on("message", (msg) => console.log("done : " + msg));
+            worker.on("error", (err) => console.log("error on worker : " + err));
+            worker.on("exit", (code) => {
+                if (code !== 0)
+                    new Error(`Worker stopped with exit code ${code}`);
+            });
+        }
     }));
     // Start the Server
     app.listen(port, () => {
