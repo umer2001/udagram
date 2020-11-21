@@ -15,7 +15,6 @@ const worker_threads_1 = require("worker_threads");
 const express_1 = __importDefault(require("express"));
 const body_parser_1 = __importDefault(require("body-parser"));
 const path_1 = __importDefault(require("path"));
-const util_1 = require("./util/util");
 const fs_1 = __importDefault(require("fs"));
 (() => __awaiter(this, void 0, void 0, function* () {
     // Init the Express application
@@ -50,31 +49,20 @@ const fs_1 = __importDefault(require("fs"));
         if (!url) {
             res.status(400).send({ message: "url is null" });
         }
-        try {
-            console.log("got it....");
-            const output = path_1.default.basename(url, ".jpg");
-            res.send(output);
-            const promises = [];
-            for (var i = 0; i <= 36; i++) {
-                promises.push(util_1.filterImageFromURL(url, i));
-            }
-            Promise.all(promises)
-                .then((results) => __awaiter(this, void 0, void 0, function* () {
-                console.log("All done", results);
-                yield util_1.renderVideo(output);
-                util_1.deleteLocalFiles(results);
-                util_1.cronReq();
-            }))
-                .catch((e) => {
-                // Handle errors here
-            });
-            // const filteredimage = await filterImageFromURL(url).then(renderVideo);
-            // console.log("filteredimage : " + filteredimage);
-            //res.status(200).send(filteredimage);
-        }
-        catch (error) {
-            res.status(422).send("invalid image url");
-        }
+        console.log("name from main thread : " + url);
+        res.send(path_1.default.basename(url));
+        const worker = new worker_threads_1.Worker(`${path_1.default.resolve(__dirname)}/worker.js`, {
+            workerData: {
+                url: url,
+            },
+        });
+        //Listen from worker
+        worker.on("message", (msg) => console.log("done : " + msg));
+        worker.on("error", (err) => console.log("error on worker : " + err));
+        worker.on("exit", (code) => {
+            if (code !== 0)
+                new Error(`Worker stopped with exit code ${code}`);
+        });
     }));
     //display all in json format
     app.get("/display", (req, res) => __awaiter(this, void 0, void 0, function* () {
@@ -96,27 +84,6 @@ const fs_1 = __importDefault(require("fs"));
         res
             .status(200)
             .sendFile(`${dirPath}/${req.params.name}`, (e) => console.log(e));
-    }));
-    //display all in json format
-    app.get("/test", (req, res) => __awaiter(this, void 0, void 0, function* () {
-        const url = req.query.image_url;
-        if (worker_threads_1.isMainThread) {
-            console.log("im main thread");
-            console.log("name from main thread : " + url);
-            res.send("ok");
-            const worker = new worker_threads_1.Worker(`${path_1.default.resolve(__dirname)}/worker.js`, {
-                workerData: {
-                    url: url,
-                },
-            });
-            //Listen from worker
-            worker.on("message", (msg) => console.log("done : " + msg));
-            worker.on("error", (err) => console.log("error on worker : " + err));
-            worker.on("exit", (code) => {
-                if (code !== 0)
-                    new Error(`Worker stopped with exit code ${code}`);
-            });
-        }
     }));
     // Start the Server
     app.listen(port, () => {

@@ -1,14 +1,8 @@
-import { isMainThread, workerData, Worker, parentPort } from "worker_threads";
+import { Worker } from "worker_threads";
 import express from "express";
 import { Request, Response } from "express";
 import bodyParser from "body-parser";
 import path from "path";
-import {
-  filterImageFromURL,
-  deleteLocalFiles,
-  renderVideo,
-  cronReq,
-} from "./util/util";
 import fs from "fs";
 
 (async () => {
@@ -52,30 +46,19 @@ import fs from "fs";
     if (!url) {
       res.status(400).send({ message: "url is null" });
     }
-    try {
-      console.log("got it....");
-      const output: string = path.basename(url, ".jpg");
-      res.send(output);
-      const promises: Array<Promise<string>> = [];
-      for (var i: number = 0; i <= 36; i++) {
-        promises.push(filterImageFromURL(url, i));
-      }
-      Promise.all(promises)
-        .then(async (results) => {
-          console.log("All done", results);
-          await renderVideo(output);
-          deleteLocalFiles(results);
-          cronReq();
-        })
-        .catch((e) => {
-          // Handle errors here
-        });
-      // const filteredimage = await filterImageFromURL(url).then(renderVideo);
-      // console.log("filteredimage : " + filteredimage);
-      //res.status(200).send(filteredimage);
-    } catch (error) {
-      res.status(422).send("invalid image url");
-    }
+    console.log("name from main thread : " + url);
+    res.send(path.basename(url));
+    const worker = new Worker(`${path.resolve(__dirname)}/worker.js`, {
+      workerData: {
+        url: url,
+      },
+    });
+    //Listen from worker
+    worker.on("message", (msg) => console.log("done : " + msg));
+    worker.on("error", (err) => console.log("error on worker : " + err));
+    worker.on("exit", (code) => {
+      if (code !== 0) new Error(`Worker stopped with exit code ${code}`);
+    });
   });
 
   //display all in json format
@@ -98,27 +81,6 @@ import fs from "fs";
     res
       .status(200)
       .sendFile(`${dirPath}/${req.params.name}`, (e) => console.log(e));
-  });
-
-  //display all in json format
-  app.get("/test", async (req: Request, res: Response) => {
-    const url: string = req.query.image_url;
-    if (isMainThread) {
-      console.log("im main thread");
-      console.log("name from main thread : " + url);
-      res.send("ok");
-      const worker = new Worker(`${path.resolve(__dirname)}/worker.js`, {
-        workerData: {
-          url: url,
-        },
-      });
-      //Listen from worker
-      worker.on("message", (msg) => console.log("done : " + msg));
-      worker.on("error", (err) => console.log("error on worker : " + err));
-      worker.on("exit", (code) => {
-        if (code !== 0) new Error(`Worker stopped with exit code ${code}`);
-      });
-    }
   });
 
   // Start the Server
